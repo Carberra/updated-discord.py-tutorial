@@ -6,6 +6,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from discord import Embed, File
 from discord.ext.commands import Bot as BotBase
+from discord.ext.commands import Context
 from discord.ext.commands import CommandNotFound
 
 from ..db import db
@@ -59,6 +60,16 @@ class Bot(BotBase):
 		print("running bot...")
 		super().run(self.TOKEN, reconnect=True)
 
+	async def process_commands(self, message):
+		ctx = await self.get_context(message, cls=Context)
+
+		if self.ready:
+			if ctx.command is not None and ctx.guild is not None:
+				await self.invoke(ctx)
+
+		else:
+			await ctx.send("I'm not ready to recieve commands. Please wait a few seconds.")
+
 	async def rules_reminder(self):
 		await self.stdout.send("Remember to adhere to the rules!")
 
@@ -80,7 +91,7 @@ class Bot(BotBase):
 			pass
 
 		else:
-			raise exc.original
+			raise exc
 
 	async def on_ready(self):
 		if not self.ready:
@@ -113,7 +124,8 @@ class Bot(BotBase):
 			print("bot reconnected")
 
 	async def on_message(self, message):
-		pass
+		if not message.author.bot:
+			await self.process_commands(message)
 
 
 bot = Bot()
