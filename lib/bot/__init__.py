@@ -8,7 +8,8 @@ from discord import Embed, File
 from discord.errors import HTTPException, Forbidden
 from discord.ext.commands import Bot as BotBase
 from discord.ext.commands import Context
-from discord.ext.commands import (CommandNotFound, BadArgument, MissingRequiredArgument)
+from discord.ext.commands import (CommandNotFound, BadArgument, MissingRequiredArgument,
+								  CommandOnCooldown)
 
 from ..db import db
 
@@ -65,12 +66,12 @@ class Bot(BotBase):
 	async def process_commands(self, message):
 		ctx = await self.get_context(message, cls=Context)
 
-		if self.ready:
-			if ctx.command is not None and ctx.guild is not None:
+		if ctx.command is not None and ctx.guild is not None:
+			if self.ready:
 				await self.invoke(ctx)
 
-		else:
-			await ctx.send("I'm not ready to recieve commands. Please wait a few seconds.")
+			else:
+				await ctx.send("I'm not ready to receive commands. Please wait a few seconds.")
 
 	async def rules_reminder(self):
 		await self.stdout.send("Remember to adhere to the rules!")
@@ -95,14 +96,21 @@ class Bot(BotBase):
 		elif isinstance(exc, MissingRequiredArgument):
 			await ctx.send("One or more required arguments are missing.")
 
-		elif isinstance(exc.original, HTTPException):
-			await ctx.send("Unable to send message.")
+		elif isinstance(exc, CommandOnCooldown):
+			await ctx.send(f"That command is on {str(exc.cooldown.type).split('.')[-1]} cooldown. Try again in {exc.retry_after:,.2f} secs.")
 
-		elif isinstance(exc.original, Forbidden):
-			await ctx.send("I do not have permission to do that.")
+		elif hasattr(exc, "original"):
+			# if isinstance(exc.original, HTTPException):
+			# 	await ctx.send("Unable to send message.")
+
+			if isinstance(exc.original, Forbidden):
+				await ctx.send("I do not have permission to do that.")
+
+			else:
+				raise exc.original
 
 		else:
-			raise exc.original
+			raise exc
 
 	async def on_ready(self):
 		if not self.ready:
