@@ -10,13 +10,18 @@ from discord.ext.commands import Bot as BotBase
 from discord.ext.commands import Context
 from discord.ext.commands import (CommandNotFound, BadArgument, MissingRequiredArgument,
 								  CommandOnCooldown)
+from discord.ext.commands import when_mentioned_or, command, has_permissions
 
 from ..db import db
 
-PREFIX = "+"
 OWNER_IDS = [385807530913169426]
 COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 IGNORE_EXCEPTIONS = (CommandNotFound, BadArgument)
+
+
+def get_prefix(bot, message):
+	prefix = db.field("SELECT Prefix FROM guilds WHERE GuildID = ?", message.guild.id)
+	return when_mentioned_or(prefix)(bot, message)
 
 
 class Ready(object):
@@ -34,7 +39,6 @@ class Ready(object):
 
 class Bot(BotBase):
 	def __init__(self):
-		self.PREFIX = PREFIX
 		self.ready = False
 		self.cogs_ready = Ready()
 
@@ -42,7 +46,7 @@ class Bot(BotBase):
 		self.scheduler = AsyncIOScheduler()
 
 		db.autosave(self.scheduler)
-		super().__init__(command_prefix=PREFIX, owner_ids=OWNER_IDS)
+		super().__init__(command_prefix=get_prefix, owner_ids=OWNER_IDS)
 
 	def setup(self):
 		for cog in COGS:
@@ -115,7 +119,7 @@ class Bot(BotBase):
 	async def on_ready(self):
 		if not self.ready:
 			self.guild = self.get_guild(626608699942764544)
-			self.stdout = self.get_channel(697563550255808543)
+			self.stdout = self.get_channel(711223407911370812)
 			self.scheduler.add_job(self.rules_reminder, CronTrigger(day_of_week=0, hour=12, minute=0, second=0))
 			self.scheduler.start()
 
