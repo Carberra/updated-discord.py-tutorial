@@ -4,7 +4,7 @@ from glob import glob
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
-from discord import Embed, File
+from discord import Embed, File, DMChannel
 from discord.errors import HTTPException, Forbidden
 from discord.ext.commands import Bot as BotBase
 from discord.ext.commands import Context
@@ -148,7 +148,30 @@ class Bot(BotBase):
 
 	async def on_message(self, message):
 		if not message.author.bot:
-			await self.process_commands(message)
+			if isinstance(message.channel, DMChannel):
+				if len(message.content) < 50:
+					await message.channel.send("Your message should be at least 50 characters in length.")
+
+				else:
+					member = self.guild.get_member(message.author.id)
+					embed = Embed(title="Modmail",
+								  colour=member.colour,
+								  timestamp=datetime.utcnow())
+
+					embed.set_thumbnail(url=member.avatar_url)
+
+					fields = [("Member", member.display_name, False),
+							  ("Message", message.content, False)]
+
+					for name, value, inline in fields:
+						embed.add_field(name=name, value=value, inline=inline)
+					
+					mod = self.get_cog("Mod")
+					await mod.log_channel.send(embed=embed)
+					await message.channel.send("Message relayed to moderators.")
+
+			else:
+				await self.process_commands(message)
 
 
 bot = Bot()
