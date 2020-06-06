@@ -1,5 +1,6 @@
 from asyncio import sleep
 from datetime import datetime, timedelta
+from re import search
 from typing import Optional
 
 from better_profanity import profanity
@@ -16,6 +17,10 @@ profanity.load_censor_words_from_file("./data/profanity.txt")
 class Mod(Cog):
 	def __init__(self, bot):
 		self.bot = bot
+
+		self.url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+		self.links_allowed = (711223407911370812, 711246048756236348)
+		self.images_allowed = (711223407911370812, 711246048756236348)
 
 	@command(name="kick")
 	@bot_has_permissions(kick_members=True)
@@ -251,7 +256,16 @@ class Mod(Cog):
 		if not message.author.bot:
 			if profanity.contains_profanity(message.content):
 				await message.delete()
-				await message.channel.send("You can't use that word here.")
+				await message.channel.send("You can't use that word here.", delete_after=10)
+
+			elif message.channel.id not in self.links_allowed and search(self.url_regex, message.content):
+				await message.delete()
+				await message.channel.send("You can't send links in this channel.", delete_after=10)
+
+			if (message.channel.id not in self.images_allowed
+				and any([hasattr(a, "width") for a in message.attachments])):
+				await message.delete()
+				await message.channel.send("You can't send images here.", delete_after=10)
 
 
 def setup(bot):
