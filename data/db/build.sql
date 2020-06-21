@@ -15,3 +15,9 @@ CREATE TABLE IF NOT EXISTS mutes (
 	RoleIDs text,
 	EndTime text
 );
+
+CREATE TABLE IF NOT EXISTS starboard (
+	RootMessageID integer PRIMARY KEY,
+	StarMessageID integer,
+	Stars integer DEFAULT 1
+);
