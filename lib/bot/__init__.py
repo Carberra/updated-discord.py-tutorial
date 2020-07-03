@@ -55,6 +55,25 @@ class Bot(BotBase):
 
 		print("setup complete")
 
+	def update_db(self):
+		db.multiexec("INSERT OR IGNORE INTO guilds (GuildID) VALUES (?)",
+					 ((guild.id,) for guild in self.guilds))
+
+		db.multiexec("INSERT OR IGNORE INTO exp (UserID) VALUES (?)",
+					 ((member.id,) for member in self.guild.members if not member.bot))
+
+		to_remove = []
+		stored_members = db.column("SELECT UserID FROM exp")
+		for id_ in stored_members:
+			print(self.guild.get_member(id_))
+			if not self.guild.get_member(id_):
+				to_remove.append(id_)
+
+		db.multiexec("DELETE FROM exp WHERE UserID = ?",
+					 ((id_,) for id_ in to_remove))
+
+		db.commit()
+
 	def run(self, version):
 		self.VERSION = version
 
@@ -122,6 +141,8 @@ class Bot(BotBase):
 			self.stdout = self.get_channel(711223407911370812)
 			self.scheduler.add_job(self.rules_reminder, CronTrigger(day_of_week=0, hour=12, minute=0, second=0))
 			self.scheduler.start()
+
+			self.update_db()
 
 			# embed = Embed(title="Now online!", description="Carberretta is now online.",
 			# 			  colour=0xFF0000, timestamp=datetime.utcnow())
