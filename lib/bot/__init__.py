@@ -65,7 +65,6 @@ class Bot(BotBase):
 		to_remove = []
 		stored_members = db.column("SELECT UserID FROM exp")
 		for id_ in stored_members:
-			print(self.guild.get_member(id_))
 			if not self.guild.get_member(id_):
 				to_remove.append(id_)
 
