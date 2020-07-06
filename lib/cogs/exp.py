@@ -2,12 +2,45 @@ from datetime import datetime, timedelta
 from random import randint
 from typing import Optional
 
-from discord import Member
+from discord import Member, Embed
 from discord.ext.commands import Cog
 from discord.ext.commands import CheckFailure
 from discord.ext.commands import command, has_permissions
+from discord.ext.menus import MenuPages, ListPageSource
 
 from ..db import db
+
+
+class HelpMenu(ListPageSource):
+	def __init__(self, ctx, data):
+		self.ctx = ctx
+
+		super().__init__(data, per_page=10)
+
+	async def write_page(self, menu, offset, fields=[]):
+		len_data = len(self.entries)
+
+		embed = Embed(title="XP Leaderboard",
+					  colour=self.ctx.author.colour)
+		embed.set_thumbnail(url=self.ctx.guild.icon_url)
+		embed.set_footer(text=f"{offset:,} - {min(len_data, offset+self.per_page-1):,} of {len_data:,} members.")
+
+		for name, value in fields:
+			embed.add_field(name=name, value=value, inline=False)
+
+		return embed
+
+	async def format_page(self, menu, entries):
+		offset = (menu.current_page*self.per_page) + 1
+
+		fields = []
+		table = ("\n".join(f"{idx+offset}. {self.ctx.bot.guild.get_member(entry[0]).display_name} (XP: {entry[1]} | Level: {entry[2]})"
+				for idx, entry in enumerate(entries)))
+
+		fields.append(("Ranks", table))
+
+		return await self.write_page(menu, offset, fields)
+
 
 class Exp(Cog):
 	def __init__(self, bot):
@@ -52,6 +85,15 @@ class Exp(Cog):
 
 		except ValueError:
 			await ctx.send("That member is not tracked by the experience system.")
+
+	@command(name="leaderboard", aliases=["lb"])
+	async def display_leaderboard(self, ctx):
+		records = db.records("SELECT UserID, XP, Level FROM exp ORDER BY XP DESC")
+
+		menu = MenuPages(source=HelpMenu(ctx, records),
+						 clear_reactions_after=True,
+						 timeout=60.0)
+		await menu.start(ctx)
 
 	@Cog.listener()
 	async def on_ready(self):
