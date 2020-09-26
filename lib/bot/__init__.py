@@ -137,7 +137,7 @@ class Bot(BotBase):
 	async def on_ready(self):
 		if not self.ready:
 			self.guild = self.get_guild(626608699942764544)
-			self.stdout = self.get_channel(711223407911370812)
+			self.stdout = self.get_channel(759434903145152533)
 			self.scheduler.add_job(self.rules_reminder, CronTrigger(day_of_week=0, hour=12, minute=0, second=0))
 			self.scheduler.start()
 

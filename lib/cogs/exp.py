@@ -129,7 +129,7 @@ class Exp(Cog):
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
-			self.levelup_channel = self.bot.get_channel(728350312154398740)
+			self.levelup_channel = self.bot.get_channel(759432499221889034)
 			self.bot.cogs_ready.ready_up("exp")
 
 	@Cog.listener()

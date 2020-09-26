@@ -19,8 +19,8 @@ class Mod(Cog):
 		self.bot = bot
 
 		self.url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
-		self.links_allowed = (711223407911370812, 711246048756236348)
-		self.images_allowed = (711223407911370812, 711246048756236348)
+		self.links_allowed = (759432499221889034,)
+		self.images_allowed = (759432499221889034,)
 
 	async def kick_members(self, message, targets, reason):
 		for target in targets:
@@ -228,7 +228,7 @@ class Mod(Cog):
 	@Cog.listener()
 	async def on_ready(self):
 		if not self.bot.ready:
-			self.log_channel = self.bot.get_channel(711246048756236348)
+			self.log_channel = self.bot.get_channel(759432499221889034)
 			self.mute_role = self.bot.guild.get_role(653941858128494600)
 
 			self.bot.cogs_ready.ready_up("mod")
