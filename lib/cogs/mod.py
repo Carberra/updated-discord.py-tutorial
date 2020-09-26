@@ -4,14 +4,32 @@ from re import search
 from typing import Optional
 
 from better_profanity import profanity
-from discord import Embed, Member
-from discord.ext.commands import Cog, Greedy
-from discord.ext.commands import CheckFailure
+from discord import Embed, Member, NotFound, Object
+from discord.utils import find
+from discord.ext.commands import Cog, Greedy, Converter
+from discord.ext.commands import CheckFailure, BadArgument
 from discord.ext.commands import command, has_permissions, bot_has_permissions
 
 from ..db import db
 
 profanity.load_censor_words_from_file("./data/profanity.txt")
+
+
+class BannedUser(Converter):
+	async def convert(self, ctx, arg):
+		if ctx.guild.me.guild_permissions.ban_members:
+			if arg.isdigit():
+				try:
+					return (await ctx.guild.fetch_ban(Object(id=int(arg)))).user
+				except NotFound:
+					raise BadArgument
+
+		banned = [e.user for e in await ctx.guild.bans()]
+		if banned:
+			if (user := find(lambda u: str(u) == arg, banned)) is not None:
+				return user
+			else:
+				raise BadArgument
 
 
 class Mod(Cog):
@@ -95,6 +113,34 @@ class Mod(Cog):
 	async def ban_command_error(self, ctx, exc):
 		if isinstance(exc, CheckFailure):
 			await ctx.send("Insufficient permissions to perform that task.")
+
+	@command(name="unban")
+	@bot_has_permissions(ban_members=True)
+	@has_permissions(ban_members=True)
+	async def unban_command(self, ctx, targets: Greedy[BannedUser], *, reason: Optional[str] = "No reason provided."):
+		if not len(targets):
+			await ctx.send("One or more required arguments are missing.")
+
+		else:
+			for target in targets:
+				await ctx.guild.unban(target, reason=reason)
+
+				embed = Embed(title="Member unbanned",
+							  colour=0xDD2222,
+							  timestamp=datetime.utcnow())
+
+				embed.set_thumbnail(url=target.avatar_url)
+
+				fields = [("Member", target.name, False),
+						  ("Actioned by", ctx.author.display_name, False),
+						  ("Reason", reason, False)]
+
+				for name, value, inline in fields:
+					embed.add_field(name=name, value=value, inline=inline)
+				
+				await self.log_channel.send(embed=embed)
+
+			await ctx.send("Action complete.")
 
 	@command(name="clear", aliases=["purge"])
 	@bot_has_permissions(manage_messages=True)
