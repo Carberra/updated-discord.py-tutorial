@@ -26,3 +26,4 @@ Feel free to fork this repository and make changes as you please, but do not dis
 ## Help
 
 For help and enquiries, join the Carberra Discord server: https://bit.ly/carb-discord.
+[![Run on Repl.it](https://repl.it/badge/github/Carberra/updated-discord.py-tutorial)](https://repl.it/github/Carberra/updated-discord.py-tutorial)

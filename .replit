@@ -1,0 +1,2 @@
+language = "bash"
+run = "py -m pip install discord.py discord.py apscheduler git+https://github.com/Rapptz/discord-ext-menus"
