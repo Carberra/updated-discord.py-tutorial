@@ -45,6 +45,12 @@ class Bot(BotBase):
 		self.guild = None
 		self.scheduler = AsyncIOScheduler()
 
+		try:
+			with open("./data/banlist.txt", "r", encoding="utf-8") as f:
+				self.banlist = [int(line.strip()) for line in f.readlines()]
+		except FileNotFoundError:
+			self.banlist = []
+
 		db.autosave(self.scheduler)
 		super().__init__(command_prefix=get_prefix, owner_ids=OWNER_IDS)
 
@@ -89,11 +95,14 @@ class Bot(BotBase):
 		ctx = await self.get_context(message, cls=Context)
 
 		if ctx.command is not None and ctx.guild is not None:
-			if self.ready:
-				await self.invoke(ctx)
+			if message.author.id in self.banlist:
+				await ctx.send("You are banned from using commands.")
+
+			elif not self.ready:
+				await ctx.send("I'm not ready to receive commands. Please wait a few seconds.")
 
 			else:
-				await ctx.send("I'm not ready to receive commands. Please wait a few seconds.")
+				await self.invoke(ctx)
 
 	async def rules_reminder(self):
 		await self.stdout.send("Remember to adhere to the rules!")

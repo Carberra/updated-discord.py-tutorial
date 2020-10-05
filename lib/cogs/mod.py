@@ -24,7 +24,7 @@ class BannedUser(Converter):
 				except NotFound:
 					raise BadArgument
 
-		banned = [e.user for e in await ctx.guild.bans()]
+		banned = [e.user for e in await ctqx.guild.bans()]
 		if banned:
 			if (user := find(lambda u: str(u) == arg, banned)) is not None:
 				return user
@@ -42,7 +42,7 @@ class Mod(Cog):
 
 	async def kick_members(self, message, targets, reason):
 		for target in targets:
-			if (message.guild.me.top_role.position > target.top_role.position 
+			if (message.guild.me.top_role.position > target.top_role.position
 				and not target.guild_permissions.administrator):
 				await target.kick(reason=reason)
 
@@ -58,7 +58,7 @@ class Mod(Cog):
 
 				for name, value, inline in fields:
 					embed.add_field(name=name, value=value, inline=inline)
-				
+
 				await self.log_channel.send(embed=embed)
 
 	@command(name="kick")
@@ -79,7 +79,7 @@ class Mod(Cog):
 
 	async def ban_members(self, message, targets, reason):
 		for target in targets:
-			if (message.guild.me.top_role.position > target.top_role.position 
+			if (message.guild.me.top_role.position > target.top_role.position
 				and not target.guild_permissions.administrator):
 				await target.ban(reason=reason)
 
@@ -95,7 +95,7 @@ class Mod(Cog):
 
 				for name, value, inline in fields:
 					embed.add_field(name=name, value=value, inline=inline)
-				
+
 				await self.log_channel.send(embed=embed)
 
 	@command(name="ban")
@@ -137,7 +137,7 @@ class Mod(Cog):
 
 				for name, value, inline in fields:
 					embed.add_field(name=name, value=value, inline=inline)
-				
+
 				await self.log_channel.send(embed=embed)
 
 			await ctx.send("Action complete.")
@@ -187,7 +187,7 @@ class Mod(Cog):
 
 					for name, value, inline in fields:
 						embed.add_field(name=name, value=value, inline=inline)
-					
+
 					await self.log_channel.send(embed=embed)
 
 					if hours:
@@ -237,7 +237,7 @@ class Mod(Cog):
 
 				for name, value, inline in fields:
 					embed.add_field(name=name, value=value, inline=inline)
-				
+
 				await self.log_channel.send(embed=embed)
 
 	@command(name="unmute")

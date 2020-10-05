@@ -85,6 +85,9 @@ class Meta(Cog):
 	async def shutdown(self, ctx):
 		await ctx.send("Shutting down...")
 
+		with open("./data/banlist.txt", "w", encoding="utf-8") as f:
+			f.writelines([f"{item}\n" for item in self.bot.banlist])
+
 		db.commit()
 		self.bot.scheduler.shutdown()
 		await self.bot.logout()
