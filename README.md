@@ -1,28 +1,39 @@
-# Building a discord.py bot (updated)
+# Building a discord.py bot (2020)
 
-This repository contains all the code for the bot constructed over the course of my series "Building a discord.py bot (2020)", which can be found here: https://www.youtube.com/playlist?list=PLYeOw6sTSy6ZGyygcbta7GcpI8a5-Cooc.
+Welcome to the official GitHub repository for the [Building a discord.py bot (2020)](https://www.youtube.com/playlist?list=PLYeOw6sTSy6ZGyygcbta7GcpI8a5-Cooc) series by [Carberra Tutorials](https://youtube.carberra.xyz)!
 
-## Installation of required components
+This repository is designed purely as a supplementary aid to the series, and should **NOT** be downloaded without having watched it first.
 
-### You will need:
-- Python 3.8.0 or greater;
-- `discord.py` 1.3.0 or greater;
-- `discord-ext-menus` 1.0.0a or greater;
-- `apscheduler` 3.6.3 or greater.
+## Prerequisites
 
-### To install Python:
-Download the latest version from here: https://www.python.org/downloads/.
-  
-### Pip installs:
-#### On Unix based systems:
-`python3.x -m pip install discord.py apscheduler git+https://github.com/Rapptz/discord-ext-menus` (replace "x" with your subversion).
-#### On Windows:
-`pip install discord.py discord.py apscheduler git+https://github.com/Rapptz/discord-ext-menus`, or `py -m pip install discord.py discord.py apscheduler git+https://github.com/Rapptz/discord-ext-menus`
+### Version table
 
-## Notes
+|                       | Minimum | Used in series |
+| --------------------- | ------- | -------------- |
+| **Python**            | 3.5.0   | 3.8.2          |
+| **discord.py**        | 1.5.0   | 1.3.2 - 1.5.0  |
+| **discord-ext-menus** | 1.0.0a  | 1.0.0a21       |
+| **apscheduler**       | Unknown | 3.6.3          |
 
-Feel free to fork this repository and make changes as you please, but do not distribute it beyond what is stated in the copyright information in the `LICENSE` file. The code in this repository is designed to be taken as a guide.
+### Installing required libraries
 
-## Help
+To install the necessary libraries, run one of the the following commands (you need to install Git first):
 
-For help and enquiries, join the Carberra Discord server: https://bit.ly/carb-discord.
+```bash
+# Windows
+py -3.8 -m pip install discord.py apscheduler git+https://github.com/Rapptz/discord-ext-menus
+
+# Linux/macOS
+python3.8 -m pip install discord.py apscheduler git+https://github.com/Rapptz/discord-ext-menus
+
+# In a virtual environment
+pip install discord.py apscheduler git+https://github.com/Rapptz/discord-ext-menus
+```
+
+## License
+
+This repository is made available via the [BSD 3-Clause License](https://github.com/Carberra/updated-discord.py-tutorial/blob/master/LICENSE).
+
+## Help and further information
+
+If you need help using this repository, [watch the series](https://www.youtube.com/playlist?list=PLYeOw6sTSy6ZGyygcbta7GcpI8a5-Cooc). If you still need help beyond that, [join the Carberra Tutorials Discord server](https://discord.carberra.xyz).
