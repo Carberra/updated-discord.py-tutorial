@@ -4,16 +4,20 @@ Welcome to the official GitHub repository for the [Building a discord.py bot (20
 
 This repository is designed purely as a supplementary aid to the series, and should **NOT** be downloaded without having watched it first.
 
+You can [browse the tags](https://github.com/Carberra/updated-discord.py-tutorial/releases) to view the code as it was after a specific episode.
+
 ## Prerequisites
 
 ### Version table
 
-|                       | Minimum | Used in series |
-| --------------------- | ------- | -------------- |
-| **Python**            | 3.5.0   | 3.8.2          |
-| **discord.py**        | 1.5.0   | 1.3.2 - 1.5.0  |
-| **discord-ext-menus** | 1.0.0a  | 1.0.0a21       |
-| **apscheduler**       | Unknown | 3.6.3          |
+|                       | Required  | Used in series |
+| --------------------- | --------- | -------------- |
+| **Python**            | >= 3.5.0  | 3.8.2          |
+| **discord.py**        | >= 1.5.0  | 1.5.0*         |
+| **discord-ext-menus** | >= 1.0.0a | 1.0.0a21       |
+| **apscheduler**       | Unknown   | 3.6.3          |
+
+*Version 1.3.2 was used mainly in the series, but breaking changes after the series was released forced the use of 1.5.0 in some episodes.
 
 ### Installing required libraries
 
