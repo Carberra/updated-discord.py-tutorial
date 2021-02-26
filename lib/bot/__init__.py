@@ -1,6 +1,7 @@
+import os
+
 from asyncio import sleep
 from datetime import datetime
-from glob import glob
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -15,7 +16,7 @@ from discord.ext.commands import when_mentioned_or, command, has_permissions
 from ..db import db
 
 OWNER_IDS = [385807530913169426]
-COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
+COGS = [path[:-3] for path in os.listdir('./lib/cogs') if path[-3:] == '.py']
 IGNORE_EXCEPTIONS = (CommandNotFound, BadArgument)
 
 
