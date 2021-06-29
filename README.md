@@ -15,7 +15,7 @@ You can [browse the tags](https://github.com/Carberra/updated-discord.py-tutoria
 | **Python**            | >= 3.5.0  | 3.8.2          |
 | **discord.py**        | >= 1.5.0  | 1.5.0*         |
 | **discord-ext-menus** | >= 1.0.0a | 1.0.0a21       |
-| **discord-ext-menus** | Unknown   | 0.7.0          |
+| **better_profanity** | Unknown   | 0.7.0          |
 | **apscheduler**       | Unknown   | 3.6.3          |
 
 *Version 1.3.2 was used mainly in the series, but breaking changes after the series was released forced the use of 1.5.0 in some episodes.
