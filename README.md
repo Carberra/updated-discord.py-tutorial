@@ -6,33 +6,9 @@ This repository is designed purely as a supplementary aid to the series, and sho
 
 You can [browse the tags](https://github.com/Carberra/updated-discord.py-tutorial/releases) to view the code as it was after a specific episode.
 
-## Prerequisites
+## Series requirements
 
-### Version table
-
-|                       | Required  | Used in series |
-| --------------------- | --------- | -------------- |
-| **Python**            | >= 3.5.0  | 3.8.2          |
-| **discord.py**        | >= 1.5.0  | 1.5.0*         |
-| **discord-ext-menus** | >= 1.0.0a | 1.0.0a21       |
-| **apscheduler**       | Unknown   | 3.6.3          |
-
-*Version 1.3.2 was used mainly in the series, but breaking changes after the series was released forced the use of 1.5.0 in some episodes.
-
-### Installing required libraries
-
-To install the necessary libraries, run one of the the following commands (you need to install Git first):
-
-```bash
-# Windows
-py -3.8 -m pip install discord.py apscheduler git+https://github.com/Rapptz/discord-ext-menus
-
-# Linux/macOS
-python3.8 -m pip install discord.py apscheduler git+https://github.com/Rapptz/discord-ext-menus
-
-# In a virtual environment
-pip install discord.py apscheduler git+https://github.com/Rapptz/discord-ext-menus
-```
+A [separate webpage](https://files.carberra.xyz/requirements/discord-bot-2020) has been created to outline all the required programs and libraries. You can also watch the [introduction video](https://www.youtube.com/watch?v=F1HbEOp-jdg&list=PLYeOw6sTSy6ZGyygcbta7GcpI8a5-Cooc&index=2) for an installation walkthrough.
 
 ## License
 
